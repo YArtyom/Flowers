@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basket</title>
+</head>
+<body>
+    <h1>Basket</h1>
+    <ul>
+        {% for item in items %}
+            <li>{{ item.product.name }} - {{ item.quantity }} x {{ item.price }} USD</li>
+        {% endfor %}
+    </ul>
+    <p>Total: {{ basket.price }} USD</p>
+    <a href="#">Proceed to Payment</a>
+    <a href="/home">Back to Shop</a>
+</body>
+</html>

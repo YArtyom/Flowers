@@ -3,13 +3,13 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
-class Customer(Base):
-    __tablename__ = "customers"
+class User(Base):
+    __tablename__ = "users"  
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     mail = Column(String, unique=True, index=True)
-    password = Column(String)
+    hashed_password = Column(String)
     profile_picture = Column(String)
 
     baskets = relationship("Basket", back_populates="customer")
@@ -31,11 +31,11 @@ class Basket(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     created_at = Column(String)
-    customer_id = Column(Integer, ForeignKey("customers.id"))
+    customer_id = Column(Integer, ForeignKey("users.id"))
     price = Column(Float)
     active_status = Column(Boolean, default=True)
 
-    customer = relationship("Customer", back_populates="baskets")
+    customer = relationship("User", back_populates="baskets")
     items = relationship("BasketItem", back_populates="basket")
 
 

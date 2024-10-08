@@ -1,15 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 
-class CustomerCreate(BaseModel):
-    name: str
-    mail: str
-    password: str
 
 class CustomerOut(BaseModel):
     id: int
     name: str
-    mail: str
+    mail: EmailStr
 
     class Config:
         orm_mode = True

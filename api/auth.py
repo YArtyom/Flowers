@@ -1,11 +1,13 @@
 from datetime import datetime, timedelta
+
+from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from schemas import CustomerOut
-from models import Customer
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 from database import get_db
+
+from models import User
 
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
@@ -25,15 +27,16 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-def authenticate_user(db: Session, mail: str, password: str):
-    user = db.query(Customer).filter(Customer.mail == mail).first()
+async def authenticate_user(db: AsyncSession, mail: str, password: str):
+    result = await db.execute(select(User).filter(User.mail == mail))
+    user = result.scalars().first()
     if not user:
         return False
     if not verify_password(password, user.password):
         return False
     return user
 
-def get_current_user(token: str, db: Session = Depends(get_db)):
+async def get_current_user(token: str, db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -46,7 +49,8 @@ def get_current_user(token: str, db: Session = Depends(get_db)):
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = db.query(Customer).filter(Customer.mail == mail).first()
+    result = await db.execute(select(User).filter(User.mail == mail))
+    user = result.scalars().first()
     if user is None:
         raise credentials_exception
     return user

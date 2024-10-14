@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<h2>Оформление заказа</h2>
+<p><strong>Сумма заказа:</strong> {{ basket.price }} руб.</p>
+<form method="post" action="/orders/create">
+    <label for="payment_method">Способ оплаты:</label><br>
+    <select name="payment_method" required>
+        <option value="cash">Наличными при получении</option>
+        <option value="card">Банковской картой</option>
+    </select><br>
+    <button type="submit">Подтвердить заказ</button>
+</form>
+{% endblock %}

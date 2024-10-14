@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Цветочный магазин{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/">Цветочный магазин</a></h1>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/products">Товары</a>
+            {% if user %}
+                <a href="/basket">Корзина</a>
+                <a href="/profile">Профиль</a>
+                <a href="/logout">Выйти</a>
+            {% else %}
+                <a href="/register">Регистрация</a>
+                <a href="/login">Вход</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2023 Цветочный магазин</p>
+    </footer>
+</body>
+</html>

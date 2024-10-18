@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Basket{% endblock %}
+
+{% block content %}
+<h1>Your Basket</h1>
+
+{% if basket_items %}
+    <ul>
+        {% for item in basket_items %}
+        <li>
+            <p>Product: {{ item.product.name }}</p>
+            <p>Price per unit: ${{ item.price }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+            <form action="/basket/update" method="post">
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                <button type="submit">Update Quantity</button>
+            </form>
+            <form action="/basket/remove" method="post">
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <button type="submit">Remove from Basket</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="/basket/clear" method="post">
+        <button type="submit">Clear Basket</button>
+    </form>
+
+    <p>Total Price: ${{ total_price }}</p>
+{% else %}
+    <p>Your basket is empty.</p>
+{% endif %}
+{% endblock %}

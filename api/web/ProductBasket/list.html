@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<h1>Available Products</h1>
+
+<ul>
+    {% for product in products %}
+    <li>
+        <h3>{{ product.name }}</h3>
+        <p>Price: ${{ product.price }}</p>
+        <p>Description: {{ product.description }}</p>
+        <img src="{{ product.product_image }}" alt="{{ product.name }}" style="width: 150px; height: 150px;"><br><br>
+
+        <form action="/basket/add" method="post">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <label for="quantity_{{ product.id }}">Quantity:</label>
+            <input type="number" id="quantity_{{ product.id }}" name="quantity" value="1" min="1">
+            <button type="submit">Add to Basket</button>
+        </form>
+    </li>
+    <hr>
+    <p>No products available.</p>
+    {% endfor %}
+</ul>
+
+{% endblock %}
